@@ -54,6 +54,7 @@
     "jsx-a11y/label-has-associated-control": [
       2, { "assert": "either" }
     ],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "prettier/prettier": "error"
   },
   "settings": {

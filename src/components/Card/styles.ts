@@ -1,17 +1,20 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 type Props = {
-  pokemonType: string;
+  'pokemon-type': string;
 };
 
-export const Container = styled.div<Props>`
-  background: ${({ theme: { pokemons }, pokemonType }) =>
+export const Container = styled(Link)<Props>`
+  background: ${({ theme: { pokemons }, 'pokemon-type': pokemonType }) =>
     pokemons.colors[pokemonType] || pokemons.colors.unknown};
   border-radius: ${({ theme }) => theme.borderRadius};
   padding: 0.063rem;
   height: 7rem;
   overflow: hidden;
   position: relative;
+  border: none;
+  text-decoration: none;
 
   @media (min-width: 768px) {
     height: 13rem;
@@ -21,7 +24,7 @@ export const Container = styled.div<Props>`
 export const ImageContent = styled.div<Props>`
   height: 78.6%;
   background: ${({ theme }) => theme.secondary};
-  color: ${({ theme: { pokemons }, pokemonType }) =>
+  color: ${({ theme: { pokemons }, 'pokemon-type': pokemonType }) =>
     pokemons.colors[pokemonType] || pokemons.colors.unknown};
   border-radius: ${({ theme: { borderRadius } }) =>
     `${borderRadius} ${borderRadius} 0 0`};
@@ -50,4 +53,5 @@ export const NameContent = styled.div`
   justify-content: center;
   align-items: center;
   color: ${({ theme }) => theme.secondary};
+  text-transform: capitalize;
 `;

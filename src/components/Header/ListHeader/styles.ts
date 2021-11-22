@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 type IHeaderProps = {
-  sortType: 'numeric' | 'text';
+  'sort-type': 'numeric' | 'text';
 };
 
 const sortTypeVariations = {
@@ -20,7 +20,6 @@ const sortTypeVariations = {
 export const Container = styled.header`
   display: flex;
   flex-direction: column;
-  top: 1.5rem;
 `;
 
 export const Header = styled.div<IHeaderProps>`
@@ -52,7 +51,7 @@ export const Header = styled.div<IHeaderProps>`
     p {
       writing-mode: vertical-rl;
       text-orientation: upright;
-      ${props => sortTypeVariations[props.sortType]}
+      ${props => sortTypeVariations[props['sort-type']]}
     }
 
     img {

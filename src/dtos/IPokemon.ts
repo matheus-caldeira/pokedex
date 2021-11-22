@@ -8,6 +8,7 @@ interface IPokemon {
   image: string;
   height: number;
   weight: number;
+  description: string;
   abilities: IAbility[];
   stats: IStat[];
   types: IType[];

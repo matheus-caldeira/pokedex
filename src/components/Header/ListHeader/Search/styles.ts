@@ -7,13 +7,13 @@ const toLeft = keyframes`
   }
 
   to {
-    left: 0;
+    left: 8px;
   }
 `;
 
 const toRight = keyframes`
   from {
-    left: 0;
+    left: 8px;
   }
 
   to {

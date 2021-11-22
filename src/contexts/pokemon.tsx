@@ -1,13 +1,23 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 
 import IPokemon from '../dtos/IPokemon';
+import Service from '../service';
 
-import fakeData from '../utils/fakePokemons';
+type IOrder = 'text' | 'numeric';
 
 interface IPokemonContextData {
   pokemons: IPokemon[];
+  order: IOrder;
+  includePokemons(firstLoad?: boolean): Promise<void>;
   filterPokemonsByName(name: string): void;
-  alterOrderPokemons(order: 'text' | 'numeric'): void;
+  alterOrderPokemons(): void;
+  includeDescription(pokemon: IPokemon): Promise<IPokemon>;
 }
 
 const PokemonContext = createContext<IPokemonContextData>(
@@ -19,7 +29,10 @@ type IProps = {
 };
 
 function PokemonProvider({ children }: IProps): JSX.Element {
-  const [pokemons, setPokemons] = useState<IPokemon[]>(fakeData);
+  const [pokemons, setPokemons] = useState<IPokemon[]>([]);
+  const [order, setOrder] = useState<IOrder>('numeric');
+  const offetSetPage = useRef(0);
+  const limitBypage = 12;
 
   const filterPokemonsByName = useCallback((name: string): void => {
     setPokemons(state => {
@@ -34,11 +47,17 @@ function PokemonProvider({ children }: IProps): JSX.Element {
     });
   }, []);
 
-  const alterOrderPokemons = useCallback((order: 'text' | 'numeric'): void => {
+  const alterOrderPokemons = useCallback(() => {
+    let newOrder: IOrder = 'numeric';
+    setOrder(state => {
+      newOrder = state === 'numeric' ? 'text' : 'numeric';
+
+      return newOrder;
+    });
     setPokemons(state => {
       const sortable = [...state];
       return sortable.sort((a, b) => {
-        if (order === 'numeric') return a.id - b.id;
+        if (newOrder === 'numeric') return a.id - b.id;
 
         if (a.name > b.name) return 1;
         if (a.name < b.name) return -1;
@@ -47,12 +66,45 @@ function PokemonProvider({ children }: IProps): JSX.Element {
     });
   }, []);
 
+  const includePokemons = useCallback(async (firstLoad?: boolean) => {
+    if (offetSetPage.current >= 700 || (firstLoad && offetSetPage.current > 0))
+      return;
+    const api = Service.getInstance();
+
+    const data = await api.list(offetSetPage.current, limitBypage);
+
+    offetSetPage.current += data.length;
+
+    setPokemons(state => [...state, ...data]);
+  }, []);
+
+  const includeDescription = useCallback(async (pokemon: IPokemon) => {
+    const api = Service.getInstance();
+
+    const description = await api.getDescription(pokemon.id);
+
+    setPokemons(state =>
+      state.map(current => {
+        if (current.id === pokemon.id) return { ...current, description };
+        return current;
+      }),
+    );
+
+    return {
+      ...pokemon,
+      description,
+    };
+  }, []);
+
   return (
     <PokemonContext.Provider
       value={{
         pokemons,
+        order,
         filterPokemonsByName,
         alterOrderPokemons,
+        includePokemons,
+        includeDescription,
       }}
     >
       {children}
