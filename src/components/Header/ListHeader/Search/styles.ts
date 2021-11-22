@@ -57,7 +57,7 @@ export const Container = styled.div`
 
   button {
     position: absolute;
-    right: 0.5rem;
+    right: 8px;
     height: 100%;
     width: auto;
     transform-origin: 50% 50%;
@@ -86,7 +86,7 @@ export const Container = styled.div`
 
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label {
-    left: 0.25rem;
+    left: 0.8px;
     animation: ${toLeft} 150ms linear;
 
     p {
