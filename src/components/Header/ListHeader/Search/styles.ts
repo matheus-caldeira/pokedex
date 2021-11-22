@@ -86,7 +86,7 @@ export const Container = styled.div`
 
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label {
-    left: 0.8px;
+    left: 8px;
     animation: ${toLeft} 150ms linear;
 
     p {
