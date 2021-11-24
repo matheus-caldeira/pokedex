@@ -48,12 +48,8 @@ function PokemonProvider({ children }: IProps): JSX.Element {
   }, []);
 
   const alterOrderPokemons = useCallback(() => {
-    let newOrder: IOrder = 'numeric';
-    setOrder(state => {
-      newOrder = state === 'numeric' ? 'text' : 'numeric';
-
-      return newOrder;
-    });
+    const newOrder: IOrder = order === 'numeric' ? 'text' : 'numeric';
+    setOrder(newOrder);
     setPokemons(state => {
       const sortable = [...state];
       return sortable.sort((a, b) => {
@@ -64,7 +60,7 @@ function PokemonProvider({ children }: IProps): JSX.Element {
         return 0;
       });
     });
-  }, []);
+  }, [order]);
 
   const includePokemons = useCallback(async (firstLoad?: boolean) => {
     if (offetSetPage.current >= 700 || (firstLoad && offetSetPage.current > 0))
